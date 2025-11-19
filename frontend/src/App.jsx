@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Delaunay } from 'd3-delaunay';
 import './App.css';
 
-const URL_BACKEND = "http://127.0.0.1:8000";
+const URL_BACKEND = "https://mapas-backtracking-algoritmos.onrender.com";
 
 const PALETA_COLORES = { 1: '#ff99c8', 2: '#fcf6bd', 3: '#d0f4de', 4: '#a9def9', 5: '#e4c1f9' };
 const NOMBRES_COLORES = { 1: 'Rosa', 2: 'Amarillo', 3: 'Verde', 4: 'Azul', 5: 'Lila' };
