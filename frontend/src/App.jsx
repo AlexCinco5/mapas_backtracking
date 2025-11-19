@@ -108,7 +108,7 @@ function App() {
   const generarExplicacion = () => {
     if (indicePaso === -1) {
         if (toast.mensaje.includes("No existe")) return "El algoritmo determinó que **no hay solución**.";
-        return "Configura y pulsa 'Generar Solución'.";
+        return "Configura y pulsa 'Resolver Mapa', puedes ver la animación paso a paso o reiniciarla.";
     }
     const p = historialPasos[indicePaso];
     if (!p) return "Fin del proceso.";
@@ -128,7 +128,7 @@ function App() {
       </div>
 
       <header>
-        <h1>Voronoi <span>Backtracking</span></h1>
+        <h1>Mapa tipo Voronoi <span>Backtracking</span></h1>
         <div className="status-badge">
             {cargando ? 'Calculando...' : (indicePaso === -1 ? 'Listo' : `Paso ${indicePaso + 1} / ${historialPasos.length}`)}
         </div>
@@ -144,8 +144,8 @@ function App() {
             <input type="range" min="3" max="60" value={cantidadPiezas} onChange={(e) => setCantidadPiezas(parseInt(e.target.value))} />
             
             <button className="btn-secondary" onClick={() => setSemilla(Math.random())}>
-                {/* Icono Regenerar (Gris Oscuro) */}
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b5563" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+                {/* Icono Regenerar (Negro) */}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000000ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
                 Regenerar
             </button>
           </div>
