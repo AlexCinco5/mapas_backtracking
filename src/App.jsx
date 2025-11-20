@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Delaunay } from 'd3-delaunay'; // npm install d3-delaunay
+import { Delaunay } from 'd3-delaunay'; 
 import './App.css';
 
 // DETECCIÓN AUTOMÁTICA DE ENTORNO
@@ -29,7 +29,7 @@ function App() {
 
   const rowRef = useRef(null);
 
-  // --- 1. GENERAR TANGRAM ---
+  // GENERAR TANGRAM 
   useEffect(() => { generarTangram(); }, [cantidadPiezas, semilla]);
 
   const generarTangram = () => {
@@ -53,7 +53,7 @@ function App() {
     setColoresRegiones({}); setHistorialPasos([]); setIndicePaso(-1); setToast({show:false, tipo:'', mensaje:''});
   };
 
-  // --- 2. BACKEND ---
+  // BACKEND 
   const resolverMapa = async () => {
     setCargando(true); setToast({ show: false, tipo: '', mensaje: '' });
     
@@ -86,7 +86,7 @@ function App() {
     }
   };
 
-  // --- 3. CONTROL ---
+  //  CONTROL DE ANIMACIÓN 
   const reconstruirEstado = (idx) => {
     const c = {};
     for (let i = 0; i <= idx; i++) {
@@ -126,8 +126,8 @@ function App() {
     const hex = PALETA_COLORES[p.color_intento];
     
     if (p.retroceso) return `🔙 **Backtracking:** Región **${p.region}** sin opciones. Retrocedemos.`;
-    if (p.valido) return `✨ **Éxito:** Región **${p.region}** pintada de <span style="color:${hex}; font-weight:bold">${col}</span>.`;
-    return `🚫 **Conflicto:** **${p.region}** no puede ser ${col}.`;
+    if (p.valido) return `:) **Éxito:** Región **${p.region}** pintada de <span style="color:${hex}; font-weight:bold">${col}</span>.`;
+    return `X **Conflicto:** **${p.region}** no puede ser ${col}.`;
   };
   const renderHTML = (html) => ({ __html: html.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>') });
 
