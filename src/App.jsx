@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Delaunay } from 'd3-delaunay';
+import { Delaunay } from 'd3-delaunay'; // npm install d3-delaunay
 import './App.css';
 
-const URL_BACKEND = "https://mapas-backtracking-algoritmos.onrender.com";
+// DETECCIÓN AUTOMÁTICA DE ENTORNO
+// Si estamos en Vercel (Producción), usa ruta relativa "".
+// Si estamos en tu PC (Desarrollo), usa el puerto 8000.
+const URL_BACKEND = import.meta.env.PROD ? "" : "http://127.0.0.1:8000";
 
 const PALETA_COLORES = { 1: '#ff99c8', 2: '#fcf6bd', 3: '#d0f4de', 4: '#a9def9', 5: '#e4c1f9' };
 const NOMBRES_COLORES = { 1: 'Rosa', 2: 'Amarillo', 3: 'Verde', 4: 'Azul', 5: 'Lila' };
@@ -26,7 +29,7 @@ function App() {
 
   const rowRef = useRef(null);
 
-  // GENERAR TANGRAM 
+  // --- 1. GENERAR TANGRAM ---
   useEffect(() => { generarTangram(); }, [cantidadPiezas, semilla]);
 
   const generarTangram = () => {
@@ -50,15 +53,21 @@ function App() {
     setColoresRegiones({}); setHistorialPasos([]); setIndicePaso(-1); setToast({show:false, tipo:'', mensaje:''});
   };
 
-  // BACKEND
+  // --- 2. BACKEND ---
   const resolverMapa = async () => {
     setCargando(true); setToast({ show: false, tipo: '', mensaje: '' });
+    
+    // Construimos la URL completa: "http.../api/resolver_coloreo" o "/api/resolver_coloreo"
+    const endpoint = `${URL_BACKEND}/api/resolver_coloreo`;
+
     try {
-      const res = await fetch(`${URL_BACKEND}/resolver_coloreo/`, {
+      const res = await fetch(endpoint, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mapa_regiones: mapaData.connections, num_colores: numColores })
       });
+      
       if (!res.ok) throw new Error(await res.text());
+      
       const data = await res.json();
       setHistorialPasos(data.animacion_pasos);
       setIndicePaso(-1); setColoresRegiones({});
@@ -70,13 +79,14 @@ function App() {
       }
     } catch (e) {
         setToast({ show: true, tipo: 'error', mensaje: `Error: ${e.message}` });
+        console.error(e);
     } finally {
       setCargando(false);
       setTimeout(() => setToast(prev => ({ ...prev, show: false })), 5000);
     }
   };
 
-  // CONTROL DE ANIMACIÓN
+  // --- 3. CONTROL ---
   const reconstruirEstado = (idx) => {
     const c = {};
     for (let i = 0; i <= idx; i++) {
@@ -104,11 +114,11 @@ function App() {
     return () => clearInterval(t);
   }, [estaAnimando, indicePaso]);
 
-  // EXPLICACIÓN
+  // --- 4. EXPLICACIÓN ---
   const generarExplicacion = () => {
     if (indicePaso === -1) {
         if (toast.mensaje.includes("No existe")) return "El algoritmo determinó que **no hay solución**.";
-        return "Configura y pulsa 'Resolver Mapa', puedes ver la animación paso a paso o reiniciarla.";
+        return "Configura y pulsa 'Generar Solución'.";
     }
     const p = historialPasos[indicePaso];
     if (!p) return "Fin del proceso.";
@@ -116,8 +126,8 @@ function App() {
     const hex = PALETA_COLORES[p.color_intento];
     
     if (p.retroceso) return `🔙 **Backtracking:** Región **${p.region}** sin opciones. Retrocedemos.`;
-    if (p.valido) return ` **Éxito:** Región **${p.region}** pintada de <span style="color:${hex}; font-weight:bold">${col}</span>.`;
-    return ` **Conflicto:** **${p.region}** no puede ser ${col}.`;
+    if (p.valido) return `✨ **Éxito:** Región **${p.region}** pintada de <span style="color:${hex}; font-weight:bold">${col}</span>.`;
+    return `🚫 **Conflicto:** **${p.region}** no puede ser ${col}.`;
   };
   const renderHTML = (html) => ({ __html: html.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>') });
 
@@ -128,7 +138,7 @@ function App() {
       </div>
 
       <header>
-        <h1>Mapa tipo Voronoi <span>Backtracking</span></h1>
+        <h1>Voronoi <span>Backtracking</span></h1>
         <div className="status-badge">
             {cargando ? 'Calculando...' : (indicePaso === -1 ? 'Listo' : `Paso ${indicePaso + 1} / ${historialPasos.length}`)}
         </div>
@@ -140,13 +150,11 @@ function App() {
           <h2>Configuración</h2>
           
           <div className="control-group">
-            <div className="label-row"><label>Piezas (Complejidad)</label><span>{cantidadPiezas}</span></div>
+            <div className="label-row"><label>Piezas</label><span>{cantidadPiezas}</span></div>
             <input type="range" min="3" max="60" value={cantidadPiezas} onChange={(e) => setCantidadPiezas(parseInt(e.target.value))} />
-            
             <button className="btn-secondary" onClick={() => setSemilla(Math.random())}>
-                {/* Icono Regenerar (Negro) */}
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000000ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
-                Regenerar
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+                Regenerar Formas
             </button>
           </div>
 
@@ -156,13 +164,12 @@ function App() {
           </div>
 
           <button className="btn-main btn-primary" onClick={resolverMapa} disabled={cargando}>
-            {cargando ? '...' : ' Resolver Mapa'}
+            {cargando ? '...' : '⚡ Resolver Mapa'}
           </button>
 
           <div className="playback-container">
              <span className="playback-label">Control de Animación</span>
              <div className="playback-bar">
-                
                 {/* Reiniciar (Icono Rojo) */}
                 <button className="btn-control btn-reset" onClick={reiniciar} title="Reiniciar">
                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 1 20.49 15"></path></svg>
@@ -193,7 +200,6 @@ function App() {
 
         {/* ÁREA PRINCIPAL */}
         <div className="main-content">
-            {/* MAPA */}
             <div className="visualization-card">
                 <div className="visualization-area">
                     <svg viewBox="0 0 1200 700" style={{width:'100%', height:'100%'}}>
@@ -211,7 +217,6 @@ function App() {
                 </div>
             </div>
 
-            {/* TABLA */}
             <div className="table-wrapper">
                 <div className="history-table-container">
                     <table className="history-table">
@@ -237,6 +242,3 @@ function App() {
 }
 
 export default App;
-
-//en mapas_backtracking -> python -m uvicorn api_backtracking:app --reload
-//en cmd en frontend como admin -> npm run dev
