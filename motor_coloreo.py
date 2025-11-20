@@ -1,5 +1,3 @@
-# Archivo: motor_coloreo.py
-
 def es_color_valido(region, color, asignacion_colores, mapa_regiones):
     """
     Verifica si 'color' se puede asignar a 'region' sin conflicto con sus vecinas.
@@ -26,17 +24,17 @@ def colorear_mapa_backtracking(mapa_regiones, num_colores):
     # Definición de la función recursiva de Backtracking
     def backtrack_recursivo(indice_region_actual):
         
-        # COMENTARIO: Condición base - Si el índice es igual al número total de regiones,
+        # Condición base - Si el índice es igual al número total de regiones,
         # significa que todas las regiones han sido coloreadas EXITOSAMENTE.
         if indice_region_actual == len(regiones):
             return True # ¡Éxito!
 
         region_actual = regiones[indice_region_actual] # La región que vamos a intentar colorear
 
-        # COMENTARIO: Intentamos colorear la región actual con cada color disponible.
+        # Intentamos colorear la región actual con cada color disponible.
         for color_intento in COLORES:
             
-            # COMENTARIO: Registramos el paso para la animación, antes de la verificación.
+            # Registramos el paso para la animación, antes de la verificación.
             paso = {
                 "region": region_actual,
                 "color_intento": color_intento,
@@ -45,22 +43,22 @@ def colorear_mapa_backtracking(mapa_regiones, num_colores):
             }
             historial_pasos.append(paso)
 
-            # COMENTARIO: Verificamos si este color es seguro para la región actual.
+            # Verificamos si este color es seguro para la región actual.
             if es_color_valido(region_actual, color_intento, asignacion_colores, mapa_regiones):
                 
-                # COMENTARIO: ¡Éxito! El color es válido. Lo asignamos y marcamos el paso.
+                # ¡Éxito! El color es válido. Lo asignamos y marcamos el paso.
                 asignacion_colores[region_actual] = color_intento
                 historial_pasos[-1]["valido"] = True # Actualizamos el paso anterior
 
-                # COMENTARIO: Llamada recursiva: intentamos colorear la siguiente región.
+                # Llamada recursiva: intentamos colorear la siguiente región.
                 if backtrack_recursivo(indice_region_actual + 1):
                     return True # Si la siguiente rama encuentra la solución, la propagamos.
 
-                # COMENTARIO: Si volvemos aquí, significa que la rama falló. ¡RETROCESO!
+                # Si volvemos aquí, significa que la rama falló. ¡RETROCESO!
                 # Deshacemos la asignación de color en la región actual.
                 del asignacion_colores[region_actual]
                 
-                # COMENTARIO: Registramos el retroceso para la animación.
+                # Registramos el retroceso para la animación.
                 historial_pasos.append({
                     "region": region_actual,
                     "color_intento": None,
@@ -68,14 +66,14 @@ def colorear_mapa_backtracking(mapa_regiones, num_colores):
                     "retroceso": True # Indicamos que se ha deshecho la asignación
                 })
             
-            # COMENTARIO: Si el color no era válido, el bucle sigue con el siguiente color.
+            # Si el color no era válido, el bucle sigue con el siguiente color.
             # No se hace nada, ya que el color nunca se asignó.
 
-        # COMENTARIO: Si el bucle termina, ningún color funcionó para esta región.
+        # Si el bucle termina, ningún color funcionó para esta región.
         # Retorna False para que la llamada anterior haga un retroceso.
         return False
 
-    # COMENTARIO: Iniciamos el proceso desde la primera región (índice 0).
+    # Iniciamos el proceso desde la primera región (índice 0).
     if backtrack_recursivo(0):
         return {
             "solucion": asignacion_colores,
