@@ -26,7 +26,7 @@ function App() {
 
   const rowRef = useRef(null);
 
-  // --- 1. GENERAR TANGRAM ---
+  // GENERAR TANGRAM 
   useEffect(() => { generarTangram(); }, [cantidadPiezas, semilla]);
 
   const generarTangram = () => {
@@ -50,7 +50,7 @@ function App() {
     setColoresRegiones({}); setHistorialPasos([]); setIndicePaso(-1); setToast({show:false, tipo:'', mensaje:''});
   };
 
-  // --- 2. BACKEND ---
+  // BACKEND
   const resolverMapa = async () => {
     setCargando(true); setToast({ show: false, tipo: '', mensaje: '' });
     try {
@@ -76,7 +76,7 @@ function App() {
     }
   };
 
-  // --- 3. CONTROL ---
+  // CONTROL DE ANIMACIÓN
   const reconstruirEstado = (idx) => {
     const c = {};
     for (let i = 0; i <= idx; i++) {
@@ -104,7 +104,7 @@ function App() {
     return () => clearInterval(t);
   }, [estaAnimando, indicePaso]);
 
-  // --- 4. EXPLICACIÓN ---
+  // EXPLICACIÓN
   const generarExplicacion = () => {
     if (indicePaso === -1) {
         if (toast.mensaje.includes("No existe")) return "El algoritmo determinó que **no hay solución**.";
@@ -116,8 +116,8 @@ function App() {
     const hex = PALETA_COLORES[p.color_intento];
     
     if (p.retroceso) return `🔙 **Backtracking:** Región **${p.region}** sin opciones. Retrocedemos.`;
-    if (p.valido) return `✨ **Éxito:** Región **${p.region}** pintada de <span style="color:${hex}; font-weight:bold">${col}</span>.`;
-    return `🚫 **Conflicto:** **${p.region}** no puede ser ${col}.`;
+    if (p.valido) return ` **Éxito:** Región **${p.region}** pintada de <span style="color:${hex}; font-weight:bold">${col}</span>.`;
+    return ` **Conflicto:** **${p.region}** no puede ser ${col}.`;
   };
   const renderHTML = (html) => ({ __html: html.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>') });
 
@@ -156,7 +156,7 @@ function App() {
           </div>
 
           <button className="btn-main btn-primary" onClick={resolverMapa} disabled={cargando}>
-            {cargando ? '...' : '⚡ Resolver Mapa'}
+            {cargando ? '...' : ' Resolver Mapa'}
           </button>
 
           <div className="playback-container">
