@@ -170,17 +170,17 @@ function App() {
           <div className="playback-container">
              <span className="playback-label">Control de Animación</span>
              <div className="playback-bar">
-                {/* Reiniciar (Icono Rojo) */}
+                {/* Reiniciar */}
                 <button className="btn-control btn-reset" onClick={reiniciar} title="Reiniciar">
                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 1 20.49 15"></path></svg>
                 </button>
 
-                {/* Anterior (Icono Gris Oscuro) */}
+                {/* Anterior */}
                 <button className="btn-control btn-nav" onClick={retrocederPaso} disabled={indicePaso < 0} title="Paso Anterior">
                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
                 </button>
 
-                {/* Play/Pausa (Icono Blanco - Fondo Azul por CSS) */}
+                {/* Play/Pausa */}
                 <button className="btn-control btn-play" onClick={() => setEstaAnimando(!estaAnimando)} title={estaAnimando ? "Pausar" : "Reproducir"}>
                    {estaAnimando ? (
                       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
@@ -189,7 +189,7 @@ function App() {
                    )}
                 </button>
 
-                {/* Siguiente (Icono Gris Oscuro) */}
+                {/* Siguiente */}
                 <button className="btn-control btn-nav" onClick={avanzarPaso} disabled={indicePaso >= historialPasos.length - 1} title="Siguiente">
                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
                 </button>
